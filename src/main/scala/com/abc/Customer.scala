@@ -3,19 +3,15 @@ package com.abc
 import scala.collection.mutable.ListBuffer
 
 class Customer(val name: String, var accounts: ListBuffer[Account] = ListBuffer()) {
-
   def openAccount(account: Account): Customer = {
     accounts += account
     this
   }
-
   def numberOfAccounts: Int = accounts.size
 
-  def totalInterestEarned: Double = accounts.map(_.interestEarned).sum
+  def totalInterestEarned(compoundr: Boolean = false): Double = accounts.map(_.interestEarned(compoundr)).sum
 
-  /**
-   * This method gets a statement
-   */
+  /** * This method gets a statement */
   def getStatement: String = {
     //JIRA-123 Change by Joe Bloggs 29/7/1988 start
     var statement: String = null //reset statement to null here
@@ -26,15 +22,11 @@ class Customer(val name: String, var accounts: ListBuffer[Account] = ListBuffer(
       s"\nTotal In All Accounts ${toDollars(totalAcrossAllAccounts)}"
     statement
   }
-
   private def statementForAccount(a: Account): String = {
     val accountType = a.accountType match {
-      case Account.CHECKING =>
-        "Checking Account\n"
-      case Account.SAVINGS =>
-        "Savings Account\n"
-      case Account.MAXI_SAVINGS =>
-        "Maxi Savings Account\n"
+      case Account.CHECKING =>     "Checking Account\n"
+      case Account.SAVINGS =>      "Savings Account\n"
+      case Account.MAXI_SAVINGS => "Maxi Savings Account\n"
     }
     val transactionSummary = a.transactions.map(t => withdrawalOrDepositText(t) + " " + toDollars(t.amount.abs))
       .mkString("  ", "\n  ", "\n")
@@ -42,13 +34,13 @@ class Customer(val name: String, var accounts: ListBuffer[Account] = ListBuffer(
     accountType + transactionSummary + totalSummary
   }
 
-  private def withdrawalOrDepositText(t: Transaction) =
+  private def withdrawalOrDepositText(t: Transaction) = {
+    val trans = if (t.transactionType != 0) "Transfer " else ""
     t.amount match {
-      case a if a < 0 => "withdrawal"
-      case a if a > 0 => "deposit"
+      case a if a < 0 => trans + "withdrawal"
+      case a if a > 0 => trans + "deposit"
       case _ => "N/A"
     }
-
+  }
   private def toDollars(number: Double): String = f"$$$number%.2f"
 }
-

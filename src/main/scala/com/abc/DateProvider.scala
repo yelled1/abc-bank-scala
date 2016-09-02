@@ -1,7 +1,8 @@
 package com.abc
 
-import java.util.Calendar
-import java.util.Date
+//import java.util.Calendar
+//import java.util.Date
+import org.joda.time._
 
 object DateProvider {
   def getInstance: DateProvider = {
@@ -13,8 +14,6 @@ object DateProvider {
 }
 
 class DateProvider {
-  def now: Date = {
-    return Calendar.getInstance.getTime
-  }
+  def now: LocalDate = LocalDate.now()
+    //return Calendar.getInstance.getTime
 }
-

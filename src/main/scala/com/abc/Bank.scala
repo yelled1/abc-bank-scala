@@ -20,9 +20,9 @@ class Bank {
     number + " " + (if (number == 1) word else word + "s")
   }
 
-  def totalInterestPaid: Double = {
+  def totalInterestPaid(compoundr: Boolean = false): Double = {
     var total: Double = 0
-    for (c <- customers) total += c.totalInterestEarned
+    for (c <- customers) total += c.totalInterestEarned(compoundr)
     return total
   }
 
@@ -40,5 +40,3 @@ class Bank {
   }
 
 }
-
-
